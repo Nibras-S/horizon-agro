@@ -328,12 +328,12 @@ const SourcingPage = ({ setActivePage }: { setActivePage: (p: string) => void })
                 <Phone size={18} /> WhatsApp Us
               </button>
             </div>
-            <div className="flex items-center gap-12 mt-8 border-t border-border-gray pt-8 w-full">
+            <div className="flex flex-wrap items-center gap-x-8 gap-y-4 mt-8 border-t border-border-gray pt-8 w-full">
               <div>
                 <p className="font-display text-2xl font-bold text-deep-forest uppercase">50K+</p>
                 <p className="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest">MT Annual Volume</p>
               </div>
-              <div className="w-px h-12 bg-border-gray"></div>
+              <div className="hidden sm:block w-px h-12 bg-border-gray"></div>
               <div>
                 <p className="font-display text-2xl font-bold text-deep-forest uppercase">KOR 48+</p>
                 <p className="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest">Premium Quality</p>
@@ -681,9 +681,9 @@ const SustainabilityPage = ({ setActivePage }: { setActivePage: (p: string) => v
       <section className="py-24 bg-white border-b border-border-gray">
         <div className="max-w-7xl mx-auto px-4 md:px-8 text-center">
           <h2 className="font-display text-3xl font-bold text-deep-forest mb-12">Our Certifications</h2>
-          <div className="flex flex-wrap justify-center gap-12 opacity-60">
+          <div className="flex flex-wrap justify-center gap-4 md:gap-12 opacity-60">
             {['FairTrade International', 'Rainforest Alliance', 'Organic EU', 'ISO 14001'].map((cert) => (
-              <div key={cert} className="font-display text-xl font-black text-on-surface-variant uppercase tracking-widest px-8 py-4 border-2 border-border-gray">
+              <div key={cert} className="font-display text-sm md:text-xl font-black text-on-surface-variant uppercase tracking-widest px-4 md:px-8 py-3 md:py-4 border-2 border-border-gray">
                 {cert}
               </div>
             ))}
@@ -717,17 +717,17 @@ const HomePage = ({ setActivePage, openArticle }: { setActivePage: (p: string) =
                  Enquire Now <ArrowRight size={18} />
                </button>
             </div>
-            <div className="flex items-center gap-8 pt-6 border-t border-border-gray">
+            <div className="flex flex-wrap items-center gap-x-6 gap-y-4 pt-6 border-t border-border-gray">
               <div>
                 <p className="font-display text-2xl font-bold text-deep-forest">50K+</p>
                 <p className="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest">MT Annual Volume</p>
               </div>
-              <div className="w-px h-10 bg-border-gray"></div>
+              <div className="hidden sm:block w-px h-10 bg-border-gray"></div>
               <div>
                 <p className="font-display text-2xl font-bold text-deep-forest">KOR 48+</p>
                 <p className="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest">Premium Grade</p>
               </div>
-              <div className="w-px h-10 bg-border-gray"></div>
+              <div className="hidden sm:block w-px h-10 bg-border-gray"></div>
               <div>
                 <p className="font-display text-2xl font-bold text-deep-forest">5+</p>
                 <p className="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest">African Origins</p>
@@ -967,12 +967,12 @@ const ProductPage = ({ setActivePage }: { setActivePage: (p: string) => void }) 
                 Request Quotation <ArrowRight size={18} />
               </button>
             </div>
-            <div className="flex items-center gap-12 mt-8 border-t border-border-gray pt-8 w-full">
+            <div className="flex flex-wrap items-center gap-x-8 gap-y-4 mt-8 border-t border-border-gray pt-8 w-full">
               <div>
                 <p className="font-display text-2xl font-bold text-deep-forest">50K+</p>
                 <p className="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest">MT Annual Volume</p>
               </div>
-              <div className="w-px h-12 bg-border-gray"></div>
+              <div className="hidden sm:block w-px h-12 bg-border-gray"></div>
               <div>
                 <p className="font-display text-2xl font-bold text-deep-forest">KOR 48+</p>
                 <p className="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest">Premium Quality</p>
