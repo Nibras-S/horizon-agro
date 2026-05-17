@@ -249,8 +249,8 @@ const Footer = ({ setActivePage }: { setActivePage: (p: string) => void }) => {
   return (
     <footer className="bg-surface-charcoal text-white py-16">
       <div className="max-w-7xl mx-auto px-4 md:px-8">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-12">
-          <div className="col-span-1 md:col-span-1">
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-10 md:gap-12">
+          <div className="col-span-2 md:col-span-1">
             <div className="font-display text-2xl font-bold mb-4 tracking-tight">HORIZON AGRO</div>
             <p className="text-sm text-outline-variant leading-relaxed max-w-xs">
               Connecting global buyers with premium African agricultural commodities through transparent and reliable supply chains.
@@ -265,23 +265,14 @@ const Footer = ({ setActivePage }: { setActivePage: (p: string) => void }) => {
             </div>
           </div>
           <div className="flex flex-col gap-4">
-            <h4 className="font-display text-sm font-bold text-tertiary uppercase tracking-widest">Legal</h4>
-            <div className="flex flex-col gap-2 text-sm text-outline-variant">
-              <button className="text-left hover:text-white transition-colors">Privacy Policy</button>
-              <button className="text-left hover:text-white transition-colors">Terms of Trade</button>
-              <button className="text-left hover:text-white transition-colors">Compliance</button>
-              <button className="text-left hover:text-white transition-colors">Certifications</button>
-            </div>
-          </div>
-          <div className="flex flex-col gap-4">
             <h4 className="font-display text-sm font-bold text-tertiary uppercase tracking-widest">Connect</h4>
             <div className="flex flex-col gap-4 text-sm text-outline-variant">
               <div className="flex items-center gap-3">
-                <Mail size={16} className="text-tertiary" />
-                <span>info@horizonagroexports.com</span>
+                <Mail size={16} className="text-tertiary shrink-0" />
+                <span className="break-all">info@horizonagroexports.com</span>
               </div>
               <div className="flex items-center gap-3">
-                <Phone size={16} className="text-tertiary" />
+                <Phone size={16} className="text-tertiary shrink-0" />
                 <span>+1 (555) 019-2837</span>
               </div>
             </div>
@@ -381,16 +372,16 @@ const SourcingPage = ({ setActivePage }: { setActivePage: (p: string) => void })
               </div>
             </div>
           </div>
-          <div className="relative rounded-sm overflow-hidden border border-border-gray shadow-md aspect-square lg:aspect-auto h-full min-h-[400px]">
-            <img 
-               src="https://lh3.googleusercontent.com/aida-public/AB6AXuBQBd7-gYulLPKPrwiEoeFtlBMQ6V-QzSzmKSvq7U_hwvgtyITcUvDYHaZN1zf117ukDA8NNpz84VrM-k5jDmQPkt4oYypvEKTIizbDrFaLFp9oLlWLvwvXFk-CuOIBjZzmALarcSUkkH12NKUnWp2Wp7KmVhOQovteGDTfz5qSWF86adKVDy45ptzHja3qhrU18euHqFsJsh7V_tC7AtC1uDqCyTAM4Ov3s-Zwr1Yba8jBUuHLSjzRIH1SBW2RA9mkLKMWuRnxF-c" 
-               alt="Global Routes" 
-               className="w-full h-full object-cover opacity-80" 
+          <div className="relative rounded-sm overflow-hidden border border-border-gray shadow-md h-[320px] md:h-[400px] lg:h-full lg:min-h-[400px]">
+            <img
+               src="https://lh3.googleusercontent.com/aida-public/AB6AXuBQBd7-gYulLPKPrwiEoeFtlBMQ6V-QzSzmKSvq7U_hwvgtyITcUvDYHaZN1zf117ukDA8NNpz84VrM-k5jDmQPkt4oYypvEKTIizbDrFaLFp9oLlWLvwvXFk-CuOIBjZzmALarcSUkkH12NKUnWp2Wp7KmVhOQovteGDTfz5qSWF86adKVDy45ptzHja3qhrU18euHqFsJsh7V_tC7AtC1uDqCyTAM4Ov3s-Zwr1Yba8jBUuHLSjzRIH1SBW2RA9mkLKMWuRnxF-c"
+               alt="Global Routes"
+               className="w-full h-full object-cover opacity-80"
             />
-            <div className="absolute inset-0 flex items-center justify-center p-8">
-               <div className="bg-white/95 backdrop-blur-md p-8 border border-border-gray shadow-xl text-center max-w-sm rounded-sm">
-                  <Globe size={40} className="mx-auto mb-4 text-trade-blue" />
-                  <h3 className="font-display text-2xl font-bold text-deep-forest mb-2 uppercase tracking-tight">Global Reach</h3>
+            <div className="absolute inset-0 flex items-center justify-center p-4 md:p-8">
+               <div className="bg-white/95 backdrop-blur-md p-6 md:p-8 border border-border-gray shadow-xl text-center max-w-xs md:max-w-sm rounded-sm">
+                  <Globe size={36} className="mx-auto mb-3 md:mb-4 text-trade-blue" />
+                  <h3 className="font-display text-xl md:text-2xl font-bold text-deep-forest mb-2 uppercase tracking-tight">Global Reach</h3>
                   <p className="text-sm text-on-surface-variant leading-relaxed">
                     Exporting to major processing hubs in India, Vietnam, and the UAE with real-time logistical tracking.
                   </p>
