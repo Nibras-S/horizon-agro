@@ -1,17 +1,7 @@
 import { motion } from "motion/react";
 import { Menu, X, ChevronRight, ChevronDown, Phone, Mail, MapPin, Search, ArrowRight, Shield, Globe, TrendingUp, Verified, BarChart3, Clock, Package, FileText, CheckCircle2, Factory, Warehouse, ClipboardCheck, Ship, User, ShieldCheck, FileSignature, HelpCircle } from "lucide-react";
 import { useState, useEffect } from "react";
-import { BrowserRouter, Routes, Route, useNavigate, useLocation, useParams } from "react-router-dom";
-
-// Map old setActivePage names to URL paths so existing pages keep working
-const pageToPath = (page: string): string => {
-  switch (page) {
-    case 'home': return '/';
-    case 'product': return '/quality-control';
-    case 'article': return '/insights';
-    default: return `/${page}`;
-  }
-};
+import { Routes, Route, useNavigate, useLocation, useParams } from "react-router-dom";
 
 // --- Data ---
 
@@ -302,7 +292,8 @@ const Footer = () => {
 
 // --- Pages ---
 
-const SourcingPage = ({ setActivePage }: { setActivePage: (p: string) => void }) => {
+const SourcingPage = () => {
+  const navigate = useNavigate();
   return (
     <div className="pt-20">
       <header className="bg-surface-bright border-b border-border-gray">
@@ -318,8 +309,8 @@ const SourcingPage = ({ setActivePage }: { setActivePage: (p: string) => void })
               Securing high-yield Raw Cashew Nuts (RCN) directly from top-producing African regions. We ensure meticulous quality control, transparent logistics, and consistent supply chains for large-scale processors worldwide.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 mt-4 w-full sm:w-auto">
-              <button 
-                onClick={() => setActivePage('contact')}
+              <button
+                onClick={() => navigate('/contact')}
                 className="bg-tertiary text-white font-display font-semibold px-8 py-4 rounded-sm hover:bg-tertiary-container transition-all flex items-center justify-center gap-3 shadow-md">
                 Request Quotation <ArrowRight size={18} />
               </button>
@@ -433,8 +424,8 @@ const SourcingPage = ({ setActivePage }: { setActivePage: (p: string) => void })
               <h2 className="font-display text-3xl font-bold mb-6">Partner for Bulk Commodities</h2>
               <p className="text-outline-variant leading-relaxed opacity-80">Join our network of international buyers and secure your supply chain with Horizon Agro Exports.</p>
            </div>
-           <button 
-             onClick={() => setActivePage('contact')}
+           <button
+             onClick={() => navigate('/contact')}
              className="bg-tertiary text-white font-display font-bold px-10 py-5 rounded-sm hover:bg-white hover:text-deep-forest transition-all shadow-xl">
              Enquire Now
            </button>
@@ -444,7 +435,8 @@ const SourcingPage = ({ setActivePage }: { setActivePage: (p: string) => void })
   );
 };
 
-const LogisticsPage = ({ setActivePage }: { setActivePage: (p: string) => void }) => {
+const LogisticsPage = () => {
+  const navigate = useNavigate();
   return (
     <div className="pt-20">
       <header className="relative bg-deep-forest text-white py-24 md:py-32 px-4 md:px-8 overflow-hidden">
@@ -462,8 +454,8 @@ const LogisticsPage = ({ setActivePage }: { setActivePage: (p: string) => void }
           <p className="font-sans text-lg text-outline-variant max-w-2xl leading-relaxed opacity-90">
             Ensuring the integrity of African raw cashew exports through precision handling, rigorous quality control, and reliable global freight coordination.
           </p>
-          <button 
-            onClick={() => setActivePage('contact')}
+          <button
+            onClick={() => navigate('/contact')}
             className="bg-tertiary text-white font-display font-bold px-10 py-5 rounded-sm hover:opacity-90 transition-all shadow-xl">
             Discuss Your Logistics Requirements
           </button>
@@ -596,7 +588,8 @@ const LogisticsPage = ({ setActivePage }: { setActivePage: (p: string) => void }
   );
 };
 
-const SustainabilityPage = ({ setActivePage }: { setActivePage: (p: string) => void }) => {
+const SustainabilityPage = () => {
+  const navigate = useNavigate();
   return (
     <div className="pt-20">
       <header className="bg-surface-bright border-b border-border-gray py-24">
@@ -669,8 +662,8 @@ const SustainabilityPage = ({ setActivePage }: { setActivePage: (p: string) => v
                     <p className="text-[10px] font-bold uppercase tracking-widest text-white/60">Revenue Reinvested</p>
                  </div>
               </div>
-              <button 
-                onClick={() => setActivePage('contact')}
+              <button
+                onClick={() => navigate('/contact')}
                 className="inline-flex items-center gap-2 font-display font-bold text-tertiary hover:text-white transition-colors">
                 Read our 2024 ESG Report <ArrowRight size={20} />
               </button>
@@ -694,7 +687,8 @@ const SustainabilityPage = ({ setActivePage }: { setActivePage: (p: string) => v
   );
 };
 
-const HomePage = ({ setActivePage, openArticle }: { setActivePage: (p: string) => void; openArticle: (id: string) => void }) => {
+const HomePage = () => {
+  const navigate = useNavigate();
   return (
     <div className="pt-20">
       {/* Hero Section */}
@@ -713,7 +707,7 @@ const HomePage = ({ setActivePage, openArticle }: { setActivePage: (p: string) =
               Bridging the gap between fertile African agricultural heritage and demanding global markets with uncompromising reliability, structural precision, and deep regional expertise.
             </p>
             <div className="flex gap-4 pt-4">
-               <button onClick={() => setActivePage('contact')} className="bg-tertiary text-white font-display font-semibold px-8 py-4 rounded-sm hover:bg-tertiary-container transition-all flex items-center gap-2">
+               <button onClick={() => navigate('/contact')} className="bg-tertiary text-white font-display font-semibold px-8 py-4 rounded-sm hover:bg-tertiary-container transition-all flex items-center gap-2">
                  Enquire Now <ArrowRight size={18} />
                </button>
             </div>
@@ -827,7 +821,7 @@ const HomePage = ({ setActivePage, openArticle }: { setActivePage: (p: string) =
                 img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDwWj9aN77JBowfS9M3aRZWPy4H4ExYOUjmn_u0F75tQLSHwHSSQy6gQnKJDXwv4Q7WU9SNDDxzCpCT9q5h33R_7KmsuNlv7cDTKhC9hTizZnhKcMMGRp4JG1tYdR8GhtGg55GUIfk7PWdQy26dZfpGNCb5Gn-iM__I6HPEXG9tzfagsLRTTr1lO7PFdMeTR4rEBX3tNsFUkuf8eMGhsKGoUXO9bPFljIcJ5lUgaRvpalNqn2i1vekaXG6kWh6rT2Dg8233-sSgU60'
               }
             ].map((zone) => (
-              <div key={zone.region} className="bg-white border border-border-gray rounded-sm flex flex-col overflow-hidden hover:shadow-2xl transition-all duration-500 group cursor-pointer" onClick={() => setActivePage('sourcing')}>
+              <div key={zone.region} className="bg-white border border-border-gray rounded-sm flex flex-col overflow-hidden hover:shadow-2xl transition-all duration-500 group cursor-pointer" onClick={() => navigate('/sourcing')}>
                 <div className="h-56 overflow-hidden">
                   <img src={zone.img} alt={zone.region} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
                 </div>
@@ -900,14 +894,14 @@ const HomePage = ({ setActivePage, openArticle }: { setActivePage: (p: string) =
               <p className="text-on-surface-variant max-w-xl">Trade analysis, harvest forecasts, and sourcing strategy from our market intelligence team.</p>
             </div>
             <button
-              onClick={() => setActivePage('insights')}
+              onClick={() => navigate('/insights')}
               className="inline-flex items-center gap-2 font-display font-bold text-primary hover:gap-3 transition-all">
               View All Insights <ArrowRight size={18} />
             </button>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {articles.slice(0, 3).map((a) => (
-              <div key={a.id} className="group cursor-pointer" onClick={() => openArticle(a.id)}>
+              <div key={a.id} className="group cursor-pointer" onClick={() => navigate(`/insights/${a.id}`)}>
                 <div className="aspect-[16/10] overflow-hidden rounded-sm border border-border-gray mb-6">
                   <img src={a.img} alt={a.title} className="w-full h-full object-cover group-hover:scale-110 transition-all duration-700" />
                 </div>
@@ -929,12 +923,12 @@ const HomePage = ({ setActivePage, openArticle }: { setActivePage: (p: string) =
           </div>
           <div className="flex flex-col sm:flex-row gap-4 shrink-0">
             <button
-              onClick={() => setActivePage('contact')}
+              onClick={() => navigate('/contact')}
               className="bg-tertiary text-white font-display font-bold px-10 py-5 rounded-sm hover:bg-white hover:text-deep-forest transition-all shadow-xl">
               Enquire Now
             </button>
             <button
-              onClick={() => setActivePage('sourcing')}
+              onClick={() => navigate('/sourcing')}
               className="border border-white/30 text-white font-display font-semibold px-10 py-5 rounded-sm hover:bg-white/10 transition-all">
               View Sourcing Details
             </button>
@@ -945,7 +939,8 @@ const HomePage = ({ setActivePage, openArticle }: { setActivePage: (p: string) =
   );
 };
 
-const ProductPage = ({ setActivePage }: { setActivePage: (p: string) => void }) => {
+const ProductPage = () => {
+  const navigate = useNavigate();
   return (
     <div className="pt-20">
       <header className="bg-surface-bright border-b border-border-gray">
@@ -961,8 +956,8 @@ const ProductPage = ({ setActivePage }: { setActivePage: (p: string) => void }) 
               Securing high-yield Raw Cashew Nuts (RCN) directly from top-producing African regions. We ensure meticulous quality control and consistent supply chains.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 mt-4 w-full sm:w-auto">
-              <button 
-                onClick={() => setActivePage('contact')}
+              <button
+                onClick={() => navigate('/contact')}
                 className="bg-tertiary text-white font-display font-semibold px-8 py-4 rounded-sm hover:bg-tertiary-container transition-all flex items-center justify-center gap-3">
                 Request Quotation <ArrowRight size={18} />
               </button>
@@ -1083,7 +1078,8 @@ const ProductPage = ({ setActivePage }: { setActivePage: (p: string) => void }) 
   );
 };
 
-const InsightsPage = ({ setActivePage, openArticle }: { setActivePage: (p: string) => void; openArticle: (id: string) => void }) => {
+const InsightsPage = () => {
+  const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [subscribed, setSubscribed] = useState(false);
 
@@ -1116,7 +1112,7 @@ const InsightsPage = ({ setActivePage, openArticle }: { setActivePage: (p: strin
         {/* Featured Post Card */}
         <div
           className="grid grid-cols-1 md:grid-cols-12 gap-12 bg-white border border-border-gray rounded-sm overflow-hidden group cursor-pointer hover:shadow-2xl transition-all duration-500 mb-20"
-          onClick={() => openArticle(featured.id)}
+          onClick={() => navigate(`/insights/${featured.id}`)}
         >
           <div className="md:col-span-12 lg:col-span-8 relative h-96 md:h-[500px] overflow-hidden">
             <img src={featured.img} alt={featured.title} className="w-full h-full object-cover group-hover:scale-105 transition-all duration-1000" />
@@ -1141,7 +1137,7 @@ const InsightsPage = ({ setActivePage, openArticle }: { setActivePage: (p: strin
         {/* List Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
           {rest.map((insight) => (
-            <div key={insight.id} className="group cursor-pointer" onClick={() => openArticle(insight.id)}>
+            <div key={insight.id} className="group cursor-pointer" onClick={() => navigate(`/insights/${insight.id}`)}>
               <div className="aspect-[16/10] overflow-hidden rounded-sm border border-border-gray mb-6">
                 <img src={insight.img} alt={insight.title} className="w-full h-full object-cover group-hover:scale-110 transition-all duration-700" />
               </div>
@@ -1299,15 +1295,13 @@ const ArticlePage = () => {
   const { id } = useParams<{ id: string }>();
   const article = articles.find(a => a.id === id) ?? articles[0];
   const related = articles.filter(a => a.id !== article.id).slice(0, 2);
-  const setActivePage = (p: string) => navigate(pageToPath(p));
-  const openArticle = (aid: string) => navigate(`/insights/${aid}`);
 
   return (
     <div className="pt-20">
       <header className="max-w-4xl mx-auto px-4 md:px-8 py-16 md:py-24">
         <div className="mb-8">
           <button
-            onClick={() => setActivePage('insights')}
+            onClick={() => navigate('/insights')}
             className="inline-flex items-center gap-2 text-sm font-medium text-on-surface-variant hover:text-primary transition-colors"
           >
             <ChevronRight size={16} className="rotate-180" /> Back to Insights
@@ -1372,7 +1366,7 @@ const ArticlePage = () => {
               <h3 className="font-display text-xl font-bold text-deep-forest mb-4">Secure Your Supply</h3>
               <p className="text-sm text-on-surface-variant leading-relaxed mb-8">Discuss forward contracts and lock in current favorable rates with our trade specialists.</p>
               <button
-                onClick={() => setActivePage('contact')}
+                onClick={() => navigate('/contact')}
                 className="w-full bg-deep-forest text-white font-display font-bold py-4 rounded-sm hover:opacity-90 transition-all">
                 Request a Quote
               </button>
@@ -1402,7 +1396,7 @@ const ArticlePage = () => {
               <h3 className="font-display text-lg font-bold text-deep-forest mb-6">Related Insights</h3>
               <div className="space-y-4">
                  {related.map((r) => (
-                   <div key={r.id} onClick={() => openArticle(r.id)} className="p-5 border border-border-gray rounded-sm hover:border-primary cursor-pointer transition-all">
+                   <div key={r.id} onClick={() => navigate(`/insights/${r.id}`)} className="p-5 border border-border-gray rounded-sm hover:border-primary cursor-pointer transition-all">
                       <h4 className="text-sm font-bold text-primary mb-2 leading-tight">{r.title}</h4>
                       <p className="text-[10px] font-medium text-on-surface-variant uppercase tracking-widest">{r.date}</p>
                    </div>
@@ -1418,34 +1412,30 @@ const ArticlePage = () => {
 // --- App ---
 
 export default function App() {
-  const [activePage, setActivePage] = useState('home');
-  const [activeArticleId, setActiveArticleId] = useState<string>(articles[0].id);
-
-  const openArticle = (id: string) => {
-    setActiveArticleId(id);
-    setActivePage('article');
-  };
+  const location = useLocation();
 
   useEffect(() => {
     window.scrollTo(0, 0);
-  }, [activePage, activeArticleId]);
+  }, [location.pathname]);
 
   return (
     <div className="min-h-screen flex flex-col font-sans">
-      <Navbar activePage={activePage} setActivePage={setActivePage} />
+      <Navbar />
 
       <main className="flex-grow">
-        {activePage === 'home' && <HomePage setActivePage={setActivePage} openArticle={openArticle} />}
-        {activePage === 'sourcing' && <SourcingPage setActivePage={setActivePage} />}
-        {activePage === 'product' && <ProductPage setActivePage={setActivePage} />}
-        {activePage === 'insights' && <InsightsPage setActivePage={setActivePage} openArticle={openArticle} />}
-        {activePage === 'article' && <ArticlePage articleId={activeArticleId} setActivePage={setActivePage} openArticle={openArticle} />}
-        {activePage === 'contact' && <ContactPage />}
-        {activePage === 'logistics' && <LogisticsPage setActivePage={setActivePage} />}
-        {activePage === 'sustainability' && <SustainabilityPage setActivePage={setActivePage} />}
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/sourcing" element={<SourcingPage />} />
+          <Route path="/logistics" element={<LogisticsPage />} />
+          <Route path="/quality-control" element={<ProductPage />} />
+          <Route path="/insights" element={<InsightsPage />} />
+          <Route path="/insights/:id" element={<ArticlePage />} />
+          <Route path="/sustainability" element={<SustainabilityPage />} />
+          <Route path="/contact" element={<ContactPage />} />
+        </Routes>
       </main>
 
-      <Footer setActivePage={setActivePage} />
+      <Footer />
     </div>
   );
 }
