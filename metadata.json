@@ -1,0 +1,8 @@
+{
+  "name": "Horizon Agro",
+  "description": "Premium African agricultural commodity sourcing and global B2B supply chain solutions.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
