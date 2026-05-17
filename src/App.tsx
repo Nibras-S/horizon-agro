@@ -709,6 +709,28 @@ const HomePage = ({ setActivePage }: { setActivePage: (p: string) => void }) => 
           </div>
         </div>
       </section>
+
+      {/* Bottom CTA */}
+      <section className="py-24 bg-deep-forest text-white">
+        <div className="max-w-7xl mx-auto px-4 md:px-8 flex flex-col md:flex-row justify-between items-center gap-12">
+          <div className="max-w-xl">
+            <h2 className="font-display text-3xl font-bold mb-4 tracking-tight">Ready to Secure Your Supply Chain?</h2>
+            <p className="text-outline-variant leading-relaxed opacity-80">Connect with our trade specialists to discuss volume requirements, pricing terms, and delivery schedules.</p>
+          </div>
+          <div className="flex flex-col sm:flex-row gap-4 shrink-0">
+            <button
+              onClick={() => setActivePage('contact')}
+              className="bg-tertiary text-white font-display font-bold px-10 py-5 rounded-sm hover:bg-white hover:text-deep-forest transition-all shadow-xl">
+              Enquire Now
+            </button>
+            <button
+              onClick={() => setActivePage('sourcing')}
+              className="border border-white/30 text-white font-display font-semibold px-10 py-5 rounded-sm hover:bg-white/10 transition-all">
+              View Sourcing Details
+            </button>
+          </div>
+        </div>
+      </section>
     </div>
   );
 };
