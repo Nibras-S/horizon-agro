@@ -576,6 +576,22 @@ const HomePage = ({ setActivePage }: { setActivePage: (p: string) => void }) => 
                  Enquire Now <ArrowRight size={18} />
                </button>
             </div>
+            <div className="flex items-center gap-8 pt-6 border-t border-border-gray">
+              <div>
+                <p className="font-display text-2xl font-bold text-deep-forest">50K+</p>
+                <p className="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest">MT Annual Volume</p>
+              </div>
+              <div className="w-px h-10 bg-border-gray"></div>
+              <div>
+                <p className="font-display text-2xl font-bold text-deep-forest">KOR 48+</p>
+                <p className="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest">Premium Grade</p>
+              </div>
+              <div className="w-px h-10 bg-border-gray"></div>
+              <div>
+                <p className="font-display text-2xl font-bold text-deep-forest">5+</p>
+                <p className="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest">African Origins</p>
+              </div>
+            </div>
           </motion.div>
           <motion.div 
             initial={{ opacity: 0, x: 20 }}
@@ -644,7 +660,7 @@ const HomePage = ({ setActivePage }: { setActivePage: (p: string) => void }) => 
                 img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDwWj9aN77JBowfS9M3aRZWPy4H4ExYOUjmn_u0F75tQLSHwHSSQy6gQnKJDXwv4Q7WU9SNDDxzCpCT9q5h33R_7KmsuNlv7cDTKhC9hTizZnhKcMMGRp4JG1tYdR8GhtGg55GUIfk7PWdQy26dZfpGNCb5Gn-iM__I6HPEXG9tzfagsLRTTr1lO7PFdMeTR4rEBX3tNsFUkuf8eMGhsKGoUXO9bPFljIcJ5lUgaRvpalNqn2i1vekaXG6kWh6rT2Dg8233-sSgU60'
               }
             ].map((zone) => (
-              <div key={zone.region} className="bg-white border border-border-gray rounded-sm flex flex-col overflow-hidden hover:shadow-2xl transition-all duration-500 group">
+              <div key={zone.region} className="bg-white border border-border-gray rounded-sm flex flex-col overflow-hidden hover:shadow-2xl transition-all duration-500 group cursor-pointer" onClick={() => setActivePage('sourcing')}>
                 <div className="h-56 overflow-hidden">
                   <img src={zone.img} alt={zone.region} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
                 </div>
@@ -656,8 +672,9 @@ const HomePage = ({ setActivePage }: { setActivePage: (p: string) => void }) => 
                   <p className="text-sm text-on-surface-variant leading-relaxed mb-8 flex-grow">
                     {zone.desc}
                   </p>
-                  <div className="pt-6 border-t border-border-gray">
+                  <div className="pt-6 border-t border-border-gray flex justify-between items-center">
                     <span className="font-sans text-[10px] font-bold text-primary uppercase tracking-[0.2em]">Key Exports: {zone.exports}</span>
+                    <ArrowRight size={14} className="text-primary opacity-0 group-hover:opacity-100 transition-opacity" />
                   </div>
                 </div>
               </div>
