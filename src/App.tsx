@@ -2,6 +2,147 @@ import { motion } from "motion/react";
 import { Menu, X, ChevronRight, Phone, Mail, MapPin, Search, ArrowRight, Shield, Globe, TrendingUp, Verified, BarChart3, Clock, Package, FileText, CheckCircle2, Factory, Warehouse, ClipboardCheck, Ship, User, ShieldCheck, FileSignature } from "lucide-react";
 import { useState, useEffect } from "react";
 
+// --- Data ---
+
+type ArticleBlock =
+  | { type: 'h2'; content: string }
+  | { type: 'p'; content: string }
+  | { type: 'ul'; content: string[] }
+  | { type: 'callout'; heading: string; items: string[] };
+
+type Article = {
+  id: string;
+  cat: string;
+  title: string;
+  excerpt: string;
+  img: string;
+  date: string;
+  author: { name: string; role: string; avatar: string };
+  featured?: boolean;
+  body: ArticleBlock[];
+};
+
+const DEFAULT_AUTHOR_AVATAR = 'https://lh3.googleusercontent.com/aida-public/AB6AXuDNAf1VM7mrVecP9jnI-oKCAEKna6NzYz1PkLy4C4rMHXhwbvIZK_HEyMMefrfksnd7QolwwU-qGCYfWWPXHa5KNbesEOvNe6Ti06IKU8immo_MmHAFfXLDpOOBn0wyG150JKrosQpwbd7Vt-i97zvvLfQd_OqKNqij_VAe3lqFnMO51cuG2TBo84xZudCfCM3PoOB5WG3kQBQjHoPnGiMnyGUVXSzPja0RpuiWsdZ2FCKryGBhLPmCMxYwzprColaj0V-lQ78PFgU';
+
+const articles: Article[] = [
+  {
+    id: 'market-outlook-2024',
+    cat: 'Market News',
+    title: '2024 African Raw Cashew Market Outlook: Trends and Forecasts',
+    excerpt: 'An in-depth analysis of crop yields across West Africa, expected price volatility, and strategic sourcing recommendations for global buyers navigating the upcoming harvest season.',
+    img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuA8sHIWqN01EmHzYxeqsXzcp77XI5b-rgokxtFA9zVheCjfytkbCpyUvfRSjpd0etRmei912DzD5t1_pOPsUXUct_yeQieLqO_ULWNGBjRpB3fZugy-G-RVY3E1ty1K0pWzFfxoPIfWlGQxABL_f2a8JmunllUeawHeH-tINcxuAXzOvbkn-wPtBBU-DPHeTjyDQqo8wpYcqlYNeX9I6x6K6rmU3rMsCojGaErZf837pNWiV9RwsQQRZM18_FC2ipT-L0lr-vbC4rg',
+    date: 'October 24, 2024',
+    author: { name: 'David Chen', role: 'Director of Market Intelligence', avatar: DEFAULT_AUTHOR_AVATAR },
+    featured: true,
+    body: [
+      { type: 'h2', content: 'Introduction to the Current Global Supply Landscape' },
+      { type: 'p', content: 'The global raw cashew nut (RCN) market is entering a pivotal phase in 2024. As major processing hubs in Asia stabilize their output capacities, attention has sharply turned to the primary sourcing regions in West Africa. This shift is driven by a complex interplay of climatic conditions, evolving regulatory frameworks, and shifting geopolitical trade dynamics.' },
+      { type: 'p', content: 'Historically, supply chain predictability has been the bedrock of RCN trading. However, this year presents unique challenges and opportunities for importers who prioritize traceability and consistent quality metrics.' },
+      { type: 'h2', content: 'Key Production Trends in West Africa' },
+      { type: 'p', content: 'West Africa remains the powerhouse of RCN production, accounting for a significant majority of the world\'s supply. Observing the granular trends within key nations—namely Benin, Ivory Coast, and Ghana—is essential for accurate market forecasting.' },
+      { type: 'ul', content: [
+        '<strong>Ivory Coast (Côte d\'Ivoire):</strong> Yields are projected to hold steady, supported by government initiatives aimed at increasing domestic processing capacities before export.',
+        '<strong>Benin:</strong> An early onset of the dry season has accelerated the harvest window, potentially leading to an earlier influx of high-KOR (Kernel Output Ratio) nuts into the market.',
+        '<strong>Ghana:</strong> Focus has heavily shifted towards sustainability certifications, making Ghanaian RCN highly attractive to premium European markets demanding strict ESG compliance.'
+      ]},
+      { type: 'h2', content: 'Price Volatility & Market Drivers' },
+      { type: 'p', content: 'Pricing structures in Q1 2024 have demonstrated notable volatility. Several macro-economic factors are currently driving these fluctuations:' },
+      { type: 'callout', heading: 'Primary Drivers', items: [
+        'Increased freight costs along major East-West shipping lanes.',
+        'Currency devaluation in select emerging markets affecting local purchasing power.',
+        'Premiums placed on verifiable organic and fair-trade consignments.'
+      ]},
+      { type: 'h2', content: 'Export Logistics & Supply Chain Resilience' },
+      { type: 'p', content: 'Navigating the 2024 landscape requires robust logistical frameworks. Delays at major transit ports necessitate advanced booking strategies and diversified routing options. Horizon Agro Exports continues to leverage its deep regional networks to ensure supply chain continuity, offering real-time tracking and quality assurance at every node of the journey.' }
+    ]
+  },
+  {
+    id: 'kor-guide',
+    cat: 'Cashew Industry',
+    title: 'A Comprehensive Guide to Raw Cashew Nut Quality & KOR',
+    excerpt: 'Understanding Kernel Outturn Ratio (KOR) is essential for processors. We break down how it is measured, why 48+ lbs matters, and how to verify quality at origin.',
+    img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBAADAcZ-coKkN49W61NrNgy9F9Q-RV7IvSLZ1TuvBQdPH0hfEiUirnasj7czzWnmir34crwOIw3PAXVugm-IYFBM-WdpA23WXig_8g-OcRhsKyvpzDhkbIo09XrZH53QjDCsVnhusnhdcnUuduIuqVPYBUAloJSyox-AnAdqRVXlorT6ksOwMoewg58nX5vUBjA0P1NM59loxJ3blZDGlTFw3cZ2od4EmL4P7r0od5J1xvBDKsm4oamTDBEzUKU1kZJaUrtTfz0E8',
+    date: 'October 12, 2024',
+    author: { name: 'Anika Patel', role: 'Head of Quality Assurance', avatar: DEFAULT_AUTHOR_AVATAR },
+    body: [
+      { type: 'h2', content: 'What is Kernel Outturn Ratio (KOR)?' },
+      { type: 'p', content: 'Kernel Outturn Ratio, commonly known as KOR, is the single most important quality metric in the raw cashew nut trade. It measures the weight of usable kernel (in pounds) recovered from processing 80 kg of raw nuts in shell. A higher KOR means a better processing yield — and a significantly higher margin for processors at destination.' },
+      { type: 'p', content: 'Industry-standard contracts typically reference KOR alongside nut count and moisture content. Any responsible exporter must be able to demonstrate KOR at origin before shipment, not after.' },
+      { type: 'h2', content: 'Why KOR 48+ Is the Benchmark' },
+      { type: 'p', content: 'Cargo grading at KOR 48 lbs and above is considered premium and is the operating standard for major Indian and Vietnamese processors. Below 46, processing economics collapse and most reputable buyers will reject the consignment outright or demand steep discounts.' },
+      { type: 'ul', content: [
+        '<strong>KOR 50+:</strong> Top-tier West African crop, commands a price premium.',
+        '<strong>KOR 48–50:</strong> Standard premium-grade benchmark used in most Horizon Agro contracts.',
+        '<strong>KOR 46–48:</strong> Acceptable but typically discounted; suited for blended processing runs.',
+        '<strong>Below 46:</strong> Not recommended for export-grade processing.'
+      ]},
+      { type: 'h2', content: 'How Horizon Tests at Origin' },
+      { type: 'p', content: 'Every consignment we ship is tested using cut-test sampling at the warehousing stage, with verification by SGS or Bureau Veritas before loading. We share KOR test certificates with the buyer before bill of lading is issued — no surprises at destination.' },
+      { type: 'callout', heading: 'Key Quality Checkpoints', items: [
+        'Cut test on a representative sample (typically 1 kg per 10 MT).',
+        'Moisture content measured with calibrated meters at warehouse.',
+        'Defect count (insect damage, mould, immature nuts) recorded and shared.',
+        'Third-party SGS/BV inspection arranged on buyer request.'
+      ]}
+    ]
+  },
+  {
+    id: 'logistics-pricing',
+    cat: 'Price Trends',
+    title: 'The Impact of Logistics on Global Commodity Pricing',
+    excerpt: 'Freight rates, demurrage, and insurance now make up a larger share of landed cost than ever. Here is how to model and mitigate the volatility.',
+    img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDdkFJEOcWd5BLR22vxqk4z1681cBEH_A2KHchBb-5yWbi6M48V2FmgbLYDJNSigNY2JfjAlzTdEkc8RKE5sPJeKkQqkm2qNZ15RNhtL9wvYmeQKDgm5RrN5l1WfTyqQg_MLcjUUeWMhRugGgCN2Chb9563H9kF_KTEyBaE3uVyY2pnToPlucgo6g334L-PVnBrXnsxrQpgqTrX9fR_grQlCeDU59SMqu8aLMvji7BvLeFeEP8t60757m3zVYW-zXHMVxLdbLFVrKU',
+    date: 'October 05, 2024',
+    author: { name: 'Marco Bellini', role: 'Head of Trade Operations', avatar: DEFAULT_AUTHOR_AVATAR },
+    body: [
+      { type: 'h2', content: 'Why Landed Cost Matters More Than FOB' },
+      { type: 'p', content: 'Procurement teams that benchmark suppliers purely on FOB pricing are leaving meaningful money on the table — and inviting risk. Ocean freight from West Africa to Asia has swung as much as 35% in a single quarter over the past two years, often dwarfing the savings from a few dollars per ton off the origin price.' },
+      { type: 'h2', content: 'The Three Hidden Cost Levers' },
+      { type: 'ul', content: [
+        '<strong>Freight rate volatility:</strong> Spot rates respond to vessel availability, fuel surcharges, and Red Sea routing disruptions. Locking in a CIF contract shifts this risk to the exporter.',
+        '<strong>Demurrage and detention:</strong> A 3-day delay at destination port can add $150–$300/MT to landed cost. Proper bill of lading management and pre-clearance documentation are essential.',
+        '<strong>Marine insurance:</strong> Premiums for African-origin agricultural cargo have risen sharply post-2022. Group policies via established exporters typically beat self-procured cover.'
+      ]},
+      { type: 'h2', content: 'FOB vs CIF: When to Choose Which' },
+      { type: 'p', content: 'FOB suits buyers with mature freight desks, existing carrier contracts, and dedicated marine insurance. CIF transfers freight and insurance risk to Horizon Agro — useful for first-time importers or buyers entering new shipping lanes. Either way, full transparency on every cost component should be table stakes.' },
+      { type: 'callout', heading: 'What to Ask Your Exporter', items: [
+        'Show me the all-in landed cost on a CIF basis, line-itemized.',
+        'What is the freight rate locked in, and for how long?',
+        'Who is responsible if the vessel rolls or arrives late?',
+        'What is the demurrage clause in the contract?'
+      ]}
+    ]
+  },
+  {
+    id: 'west-africa-seasons',
+    cat: 'Sourcing',
+    title: 'Sourcing from West Africa: Key Harvest Seasons',
+    excerpt: 'The narrow harvest windows in Ivory Coast, Benin, and Ghana drive almost every supply decision. Here is how to time your contracts around them.',
+    img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDa2yKUBaq--VH_QCfEQ4MpGeAl_jK3isGJBpu-GLDgclBIjy1-Wm6ygZSZ64EqjcDpkWEEd2z4dUaHTdPqEoduYkHd2WYZfdoM3fMLRUIVnLwrB7-1VmyYvW0eA48BoG5Xe3Z20_hzI0Ag0zfFXgp596Ijjc3I_ZOFDgiC5SJ_5Crr8DMzjtr1uVfkW-cdq_iq4Ep7B3T9Nzfow9qr8Qrir9zkI1IfVteRdYj7VvO2zqbuxfU8lxz2SrHDcNPjko6DHCBMRFbOM4Y',
+    date: 'September 28, 2024',
+    author: { name: 'Fatou Diallo', role: 'Regional Sourcing Lead, West Africa', avatar: DEFAULT_AUTHOR_AVATAR },
+    body: [
+      { type: 'h2', content: 'The Calendar That Drives Every Cashew Contract' },
+      { type: 'p', content: 'Cashew is a seasonal crop with a narrow window. In West Africa, the harvest typically runs February through May, but the exact onset varies by country and by year — driven primarily by the timing of the dry season. Buyers who lock in contracts before the harvest window opens consistently secure better KOR and tighter pricing.' },
+      { type: 'h2', content: 'Country-by-Country Harvest Windows' },
+      { type: 'ul', content: [
+        '<strong>Ivory Coast:</strong> Peak harvest mid-February through April. As the world\'s largest producer, supply ramps quickly — early contracts secure best-grade lots before mass aggregation.',
+        '<strong>Benin:</strong> Harvest starts late February and runs into May. Renowned for consistently high KOR (48–52 lbs) when sourced direct from cooperative aggregators.',
+        '<strong>Ghana:</strong> A slightly later window (March through May), with strong availability of certified sustainable lots suited for EU buyers.',
+        '<strong>Nigeria:</strong> Largest absolute volumes but more variable quality. Selective sourcing required.'
+      ]},
+      { type: 'h2', content: 'Practical Procurement Timing' },
+      { type: 'p', content: 'Forward contracts signed in November–January typically capture the best pricing and quality allocation, because aggregators lock supply commitments to cooperatives ahead of the harvest. Buyers entering the market in April are competing for residual stock, often at premium prices and lower KOR.' },
+      { type: 'callout', heading: 'Horizon Agro Sourcing Schedule', items: [
+        'Nov–Jan: Forward contracts negotiated, deposits placed with cooperatives.',
+        'Feb–May: Active harvest aggregation, quality testing at warehouse.',
+        'Mar–Jun: Container stuffing and ocean shipment.',
+        'Jul–Oct: Off-season supply via inventory carry and stored lots.'
+      ]}
+    ]
+  }
+];
+
 // --- Components ---
 
 const Navbar = ({ activePage, setActivePage }: { activePage: string; setActivePage: (p: string) => void }) => {
@@ -553,7 +694,7 @@ const SustainabilityPage = ({ setActivePage }: { setActivePage: (p: string) => v
   );
 };
 
-const HomePage = ({ setActivePage }: { setActivePage: (p: string) => void }) => {
+const HomePage = ({ setActivePage, openArticle }: { setActivePage: (p: string) => void; openArticle: (id: string) => void }) => {
   return (
     <div className="pt-20">
       {/* Hero Section */}
@@ -626,6 +767,32 @@ const HomePage = ({ setActivePage }: { setActivePage: (p: string) => void }) => 
                 "We do not just trade commodities; we engineer reliable supply chains that empower global food and manufacturing networks."
               </p>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* How We Deliver */}
+      <section className="py-24 bg-surface-bright border-t border-border-gray">
+        <div className="max-w-7xl mx-auto px-4 md:px-8">
+          <div className="text-center mb-16">
+            <h2 className="font-display text-3xl font-bold text-deep-forest mb-4">How We Deliver</h2>
+            <p className="text-on-surface-variant max-w-2xl mx-auto">A streamlined, transparent process designed to mitigate risk and ensure timely delivery of high-quality commodities.</p>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            {[
+              { num: '1', title: 'Direct Sourcing', desc: 'We engage directly with farmer cooperatives during harvest season to secure the freshest crop.' },
+              { num: '2', title: 'Quality Assessment', desc: 'Rigorous testing for KOR, moisture content, and defect counts before warehousing.' },
+              { num: '3', title: 'Secure Processing', desc: 'Proper drying, jute bagging, and secure warehousing to maintain integrity.' },
+              { num: '4', title: 'Global Logistics', desc: 'Customs clearance, container stuffing, and FOB or CIF shipping to your destination port.' }
+            ].map((step, i) => (
+              <div key={i} className="bg-white p-8 border border-border-gray rounded-sm group hover:shadow-2xl transition-all">
+                <div className="w-12 h-12 rounded-full border border-border-gray flex items-center justify-center text-xl font-display font-bold text-deep-forest mb-6 group-hover:bg-primary group-hover:text-white transition-all">
+                  {step.num}
+                </div>
+                <h3 className="font-display font-bold text-deep-forest text-lg mb-4 uppercase tracking-wide">{step.title}</h3>
+                <p className="text-sm text-on-surface-variant leading-relaxed">{step.desc}</p>
+              </div>
+            ))}
           </div>
         </div>
       </section>
@@ -705,6 +872,49 @@ const HomePage = ({ setActivePage }: { setActivePage: (p: string) => void }) => 
                   <h3 className="font-display text-xl font-bold text-deep-forest mb-4">{item.title}</h3>
                   <p className="text-sm text-on-surface-variant leading-relaxed">{item.desc}</p>
                </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Certifications */}
+      <section className="py-16 bg-surface-bright border-t border-border-gray">
+        <div className="max-w-7xl mx-auto px-4 md:px-8">
+          <p className="text-center text-[10px] font-bold text-on-surface-variant uppercase tracking-[0.3em] mb-10">Certified & Compliant</p>
+          <div className="flex flex-wrap justify-center items-center gap-8 md:gap-16 opacity-70">
+            {['FairTrade International', 'Rainforest Alliance', 'Organic EU', 'ISO 14001', 'SGS Verified'].map((cert) => (
+              <div key={cert} className="font-display text-sm md:text-base font-black text-on-surface-variant uppercase tracking-widest">
+                {cert}
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Latest Insights */}
+      <section className="py-24 bg-white border-t border-border-gray">
+        <div className="max-w-7xl mx-auto px-4 md:px-8">
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-16 gap-6">
+            <div>
+              <h2 className="font-display text-3xl font-bold text-deep-forest mb-4">Latest Market Intelligence</h2>
+              <p className="text-on-surface-variant max-w-xl">Trade analysis, harvest forecasts, and sourcing strategy from our market intelligence team.</p>
+            </div>
+            <button
+              onClick={() => setActivePage('insights')}
+              className="inline-flex items-center gap-2 font-display font-bold text-primary hover:gap-3 transition-all">
+              View All Insights <ArrowRight size={18} />
+            </button>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {articles.slice(0, 3).map((a) => (
+              <div key={a.id} className="group cursor-pointer" onClick={() => openArticle(a.id)}>
+                <div className="aspect-[16/10] overflow-hidden rounded-sm border border-border-gray mb-6">
+                  <img src={a.img} alt={a.title} className="w-full h-full object-cover group-hover:scale-110 transition-all duration-700" />
+                </div>
+                <div className="text-[10px] font-bold text-tertiary uppercase tracking-widest mb-3">{a.cat}</div>
+                <h3 className="font-display text-lg font-bold text-deep-forest mb-3 leading-tight group-hover:text-primary transition-colors">{a.title}</h3>
+                <div className="text-xs text-on-surface-variant uppercase font-medium">{a.date}</div>
+              </div>
             ))}
           </div>
         </div>
@@ -873,7 +1083,20 @@ const ProductPage = ({ setActivePage }: { setActivePage: (p: string) => void }) 
   );
 };
 
-const InsightsPage = ({ setActivePage }: { setActivePage: (p: string) => void }) => {
+const InsightsPage = ({ setActivePage, openArticle }: { setActivePage: (p: string) => void; openArticle: (id: string) => void }) => {
+  const [email, setEmail] = useState('');
+  const [subscribed, setSubscribed] = useState(false);
+
+  const handleSubscribe = (e: { preventDefault: () => void }) => {
+    e.preventDefault();
+    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return;
+    setSubscribed(true);
+    setEmail('');
+  };
+
+  const featured = articles.find(a => a.featured) ?? articles[0];
+  const rest = articles.filter(a => a.id !== featured.id);
+
   return (
     <div className="pt-20">
       <header className="bg-surface-bright border-b border-border-gray py-24 mb-12">
@@ -891,23 +1114,23 @@ const InsightsPage = ({ setActivePage }: { setActivePage: (p: string) => void })
 
       <section className="max-w-7xl mx-auto px-4 md:px-8 mb-24">
         {/* Featured Post Card */}
-        <div 
+        <div
           className="grid grid-cols-1 md:grid-cols-12 gap-12 bg-white border border-border-gray rounded-sm overflow-hidden group cursor-pointer hover:shadow-2xl transition-all duration-500 mb-20"
-          onClick={() => setActivePage('article')}
+          onClick={() => openArticle(featured.id)}
         >
           <div className="md:col-span-12 lg:col-span-8 relative h-96 md:h-[500px] overflow-hidden">
-            <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuA8sHIWqN01EmHzYxeqsXzcp77XI5b-rgokxtFA9zVheCjfytkbCpyUvfRSjpd0etRmei912DzD5t1_pOPsUXUct_yeQieLqO_ULWNGBjRpB3fZugy-G-RVY3E1ty1K0pWzFfxoPIfWlGQxABL_f2a8JmunllUeawHeH-tINcxuAXzOvbkn-wPtBBU-DPHeTjyDQqo8wpYcqlYNeX9I6x6K6rmU3rMsCojGaErZf837pNWiV9RwsQQRZM18_FC2ipT-L0lr-vbC4rg" alt="Warehouse" className="w-full h-full object-cover group-hover:scale-105 transition-all duration-1000" />
-            <div className="absolute top-6 left-6 bg-primary text-white px-4 py-1.5 font-display text-[10px] font-bold rounded-sm uppercase tracking-widest shadow-lg">Market News</div>
+            <img src={featured.img} alt={featured.title} className="w-full h-full object-cover group-hover:scale-105 transition-all duration-1000" />
+            <div className="absolute top-6 left-6 bg-primary text-white px-4 py-1.5 font-display text-[10px] font-bold rounded-sm uppercase tracking-widest shadow-lg">{featured.cat}</div>
           </div>
           <div className="md:col-span-12 lg:col-span-4 p-8 md:p-12 flex flex-col justify-center">
             <div className="flex items-center gap-2 mb-6 text-on-surface-variant font-sans text-xs font-bold uppercase tracking-widest">
-              <Clock size={16} /> October 24, 2024
+              <Clock size={16} /> {featured.date}
             </div>
             <h2 className="font-display text-2xl md:text-3xl font-bold text-deep-forest mb-8 leading-tight tracking-tight group-hover:text-primary transition-colors">
-              2024 African Raw Cashew Market Outlook: Trends and Forecasts
+              {featured.title}
             </h2>
             <p className="text-on-surface-variant leading-relaxed mb-10 text-sm">
-              An in-depth analysis of crop yields across West Africa, expected price volatility, and strategic sourcing recommendations for global buyers navigating the upcoming harvest season.
+              {featured.excerpt}
             </p>
             <div className="flex items-center text-primary font-display text-sm font-bold gap-2">
               Read Full Report <ArrowRight size={20} />
@@ -917,27 +1140,8 @@ const InsightsPage = ({ setActivePage }: { setActivePage: (p: string) => void })
 
         {/* List Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
-          {[
-            { 
-              cat: 'Cashew Industry', 
-              title: 'A Comprehensive Guide to Raw Cashew Nut Quality & KOR', 
-              img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBAADAcZ-coKkN49W61NrNgy9F9Q-RV7IvSLZ1TuvBQdPH0hfEiUirnasj7czzWnmir34crwOIw3PAXVugm-IYFBM-WdpA23WXig_8g-OcRhsKyvpzDhkbIo09XrZH53QjDCsVnhusnhdcnUuduIuqVPYBUAloJSyox-AnAdqRVXlorT6ksOwMoewg58nX5vUBjA0P1NM59loxJ3blZDGlTFw3cZ2od4EmL4P7r0od5J1xvBDKsm4oamTDBEzUKU1kZJaUrtTfz0E8',
-              date: 'Oct 12, 2024'
-            },
-            { 
-              cat: 'Price Trends', 
-              title: 'The Impact of Logistics on Global Commodity Pricing', 
-              img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDdkFJEOcWd5BLR22vxqk4z1681cBEH_A2KHchBb-5yWbi6M48V2FmgbLYDJNSigNY2JfjAlzTdEkc8RKE5sPJeKkQqkm2qNZ15RNhtL9wvYmeQKDgm5RrN5l1WfTyqQg_MLcjUUeWMhRugGgCN2Chb9563H9kF_KTEyBaE3uVyY2pnToPlucgo6g334L-PVnBrXnsxrQpgqTrX9fR_grQlCeDU59SMqu8aLMvji7BvLeFeEP8t60757m3zVYW-zXHMVxLdbLFVrKU',
-              date: 'Oct 05, 2024'
-            },
-            { 
-              cat: 'Sourcing', 
-              title: 'Sourcing from West Africa: Key Harvest Seasons', 
-              img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDa2yKUBaq--VH_QCfEQ4MpGeAl_jK3isGJBpu-GLDgclBIjy1-Wm6ygZSZ64EqjcDpkWEEd2z4dUaHTdPqEoduYkHd2WYZfdoM3fMLRUIVnLwrB7-1VmyYvW0eA48BoG5Xe3Z20_hzI0Ag0zfFXgp596Ijjc3I_ZOFDgiC5SJ_5Crr8DMzjtr1uVfkW-cdq_iq4Ep7B3T9Nzfow9qr8Qrir9zkI1IfVteRdYj7VvO2zqbuxfU8lxz2SrHDcNPjko6DHCBMRFbOM4Y',
-              date: 'Sep 28, 2024'
-            }
-          ].map((insight, i) => (
-            <div key={i} className="group cursor-pointer" onClick={() => setActivePage('article')}>
+          {rest.map((insight) => (
+            <div key={insight.id} className="group cursor-pointer" onClick={() => openArticle(insight.id)}>
               <div className="aspect-[16/10] overflow-hidden rounded-sm border border-border-gray mb-6">
                 <img src={insight.img} alt={insight.title} className="w-full h-full object-cover group-hover:scale-110 transition-all duration-700" />
               </div>
@@ -957,10 +1161,26 @@ const InsightsPage = ({ setActivePage }: { setActivePage: (p: string) => void })
               <p className="text-outline-variant leading-relaxed text-sm opacity-80">Join our exclusive mailing list to receive monthly market reports, price trend alerts, and strategic sourcing advice directly to your inbox.</p>
            </div>
            <div className="md:w-1/2 w-full flex flex-col gap-4">
-              <div className="flex flex-col sm:flex-row gap-2">
-                <input className="flex-grow px-6 py-4 bg-white/10 border border-white/20 text-white rounded-sm focus:outline-none focus:border-white transition-all" placeholder="Enter your business email" type="email" />
-                <button className="bg-tertiary text-white font-display font-bold px-8 py-4 rounded-sm hover:bg-white hover:text-deep-forest transition-all">Subscribe Now</button>
-              </div>
+              {subscribed ? (
+                <div className="bg-white/10 border border-tertiary/40 rounded-sm px-6 py-5 flex items-center gap-3">
+                  <CheckCircle2 size={20} className="text-tertiary shrink-0" />
+                  <span className="text-white text-sm">Thanks — you're on the list. Watch your inbox for our next market report.</span>
+                </div>
+              ) : (
+                <form onSubmit={handleSubscribe} className="flex flex-col sm:flex-row gap-2">
+                  <input
+                    type="email"
+                    required
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="Enter your business email"
+                    className="flex-grow px-6 py-4 bg-white/10 border border-white/20 text-white rounded-sm focus:outline-none focus:border-white transition-all placeholder:text-white/40"
+                  />
+                  <button type="submit" className="bg-tertiary text-white font-display font-bold px-8 py-4 rounded-sm hover:bg-white hover:text-deep-forest transition-all">
+                    Subscribe Now
+                  </button>
+                </form>
+              )}
               <p className="text-[10px] text-white/40 font-medium uppercase tracking-widest">We respect your privacy. No spam, just trade intelligence.</p>
            </div>
         </div>
@@ -1074,7 +1294,10 @@ const ContactPage = () => {
   );
 };
 
-const ArticlePage = ({ setActivePage }: { setActivePage: (p: string) => void }) => {
+const ArticlePage = ({ articleId, setActivePage, openArticle }: { articleId: string; setActivePage: (p: string) => void; openArticle: (id: string) => void }) => {
+  const article = articles.find(a => a.id === articleId) ?? articles[0];
+  const related = articles.filter(a => a.id !== article.id).slice(0, 2);
+
   return (
     <div className="pt-20">
       <header className="max-w-4xl mx-auto px-4 md:px-8 py-16 md:py-24">
@@ -1087,73 +1310,64 @@ const ArticlePage = ({ setActivePage }: { setActivePage: (p: string) => void }) 
           </button>
         </div>
         <div className="mb-6">
-           <span className="bg-primary text-white px-3 py-1 font-sans text-[10px] font-bold uppercase tracking-widest rounded-sm">Market News</span>
+           <span className="bg-primary text-white px-3 py-1 font-sans text-[10px] font-bold uppercase tracking-widest rounded-sm">{article.cat}</span>
         </div>
         <h1 className="font-display text-3xl md:text-5xl font-bold text-deep-forest mb-8 leading-tight tracking-tight">
-          2024 African Raw Cashew Market Outlook: Trends and Forecasts
+          {article.title}
         </h1>
         <div className="flex items-center gap-6 pb-12 border-b border-border-gray">
            <div className="flex items-center gap-3">
               <div className="w-12 h-12 rounded-full overflow-hidden border border-border-gray bg-surface-container">
-                 <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuDNAf1VM7mrVecP9jnI-oKCAEKna6NzYz1PkLy4C4rMHXhwbvIZK_HEyMMefrfksnd7QolwwU-qGCYfWWPXHa5KNbesEOvNe6Ti06IKU8immo_MmHAFfXLDpOOBn0wyG150JKrosQpwbd7Vt-i97zvvLfQd_OqKNqij_VAe3lqFnMO51cuG2TBo84xZudCfCM3PoOB5WG3kQBQjHoPnGiMnyGUVXSzPja0RpuiWsdZ2FCKryGBhLPmCMxYwzprColaj0V-lQ78PFgU" alt="Author" className="w-full h-full object-cover" />
+                 <img src={article.author.avatar} alt={article.author.name} className="w-full h-full object-cover" />
               </div>
               <div>
-                 <p className="text-sm font-bold text-primary leading-none">David Chen</p>
-                 <p className="text-xs text-on-surface-variant font-medium mt-1">Director of Market Intelligence</p>
+                 <p className="text-sm font-bold text-primary leading-none">{article.author.name}</p>
+                 <p className="text-xs text-on-surface-variant font-medium mt-1">{article.author.role}</p>
               </div>
            </div>
            <div className="h-8 w-px bg-border-gray"></div>
-           <div className="text-xs font-bold text-on-surface-variant uppercase tracking-widest">March 15, 2024</div>
+           <div className="text-xs font-bold text-on-surface-variant uppercase tracking-widest">{article.date}</div>
         </div>
       </header>
 
       <div className="w-full h-96 md:h-[600px] overflow-hidden">
-         <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuBKkedD34XRtwDN-NTVj0O204KK4Sz7f_o7l2mJFyFCjkpOuZw6CGH-J7sfSln07Bk4dLkE-Rd2Mx7lr3kcl5aZN_QJXsjYRSNVGmInDFq6N6BvAfXr6aPd2YJbvpy9HeveMghiSS_XMO1p9cWk3sH-VMi91Y1tl3pOJpv2Gmn-ZFaw_XpOSYjWIhnzcA4GXD1VMzqxjrYatB1uanNGL4J2Fiqh4YaOutPMTssnTnLUcSKatcRJ7RgNOugujOMSRvlgHxCDATWqIBE" alt="Port" className="w-full h-full object-cover" />
+         <img src={article.img} alt={article.title} className="w-full h-full object-cover" />
       </div>
 
       <div className="max-w-7xl mx-auto px-4 md:px-8 py-24 grid grid-cols-1 lg:grid-cols-12 gap-16">
         <div className="lg:col-span-8 markdown-body">
-           <h2>Introduction to the Current Global Supply Landscape</h2>
-           <p>The global raw cashew nut (RCN) market is entering a pivotal phase in 2024. As major processing hubs in Asia stabilize their output capacities, attention has sharply turned to the primary sourcing regions in West Africa. This shift is driven by a complex interplay of climatic conditions, evolving regulatory frameworks, and shifting geopolitical trade dynamics.</p>
-           <p>Historically, supply chain predictability has been the bedrock of RCN trading. However, this year presents unique challenges and opportunities for importers who prioritize traceability and consistent quality metrics.</p>
-           
-           <h2>Key Production Trends in West Africa</h2>
-           <p>West Africa remains the powerhouse of RCN production, accounting for a significant majority of the world's supply. Observing the granular trends within key nations—namely Benin, Ivory Coast, and Ghana—is essential for accurate market forecasting.</p>
-           <ul>
-             <li><strong>Ivory Coast (Côte d'Ivoire):</strong> Yields are projected to hold steady, supported by government initiatives aimed at increasing domestic processing capacities before export.</li>
-             <li><strong>Benin:</strong> An early onset of the dry season has accelerated the harvest window, potentially leading to an earlier influx of high-KOR (Kernel Output Ratio) nuts into the market.</li>
-             <li><strong>Ghana:</strong> Focus has heavily shifted towards sustainability certifications, making Ghanaian RCN highly attractive to premium European markets demanding strict ESG compliance.</li>
-           </ul>
-
-           <h2>Price Volatility & Market Drivers</h2>
-           <p>Pricing structures in Q1 2024 have demonstrated notable volatility. Several macro-economic factors are currently driving these fluctuations:</p>
-           <div className="my-10 p-8 bg-surface-bright border border-border-gray rounded-sm">
-             <h3 className="font-display text-xl font-bold text-deep-forest mb-6">Primary Drivers</h3>
-             <ul className="space-y-4 text-sm list-none pl-0">
-               <li className="flex items-center gap-3">
-                 <CheckCircle2 size={16} className="text-primary flex-shrink-0" />
-                 <span>Increased freight costs along major East-West shipping lanes.</span>
-               </li>
-               <li className="flex items-center gap-3">
-                 <CheckCircle2 size={16} className="text-primary flex-shrink-0" />
-                 <span>Currency devaluation in select emerging markets affecting local purchasing power.</span>
-               </li>
-               <li className="flex items-center gap-3">
-                 <CheckCircle2 size={16} className="text-primary flex-shrink-0" />
-                 <span>Premiums placed on verifiable organic and fair-trade consignments.</span>
-               </li>
-             </ul>
-           </div>
-
-           <h2>Export Logistics & Supply Chain Resilience</h2>
-           <p>Navigating the 2024 landscape requires robust logistical frameworks. Delays at major transit ports necessitate advanced booking strategies and diversified routing options. Horizon Agro Exports continues to leverage its deep regional networks to ensure supply chain continuity, offering real-time tracking and quality assurance at every node of the journey.</p>
+           {article.body.map((block, idx) => {
+             if (block.type === 'h2') return <h2 key={idx}>{block.content}</h2>;
+             if (block.type === 'p') return <p key={idx}>{block.content}</p>;
+             if (block.type === 'ul') return (
+               <ul key={idx}>
+                 {block.content.map((item, i) => (
+                   <li key={i} dangerouslySetInnerHTML={{ __html: item }} />
+                 ))}
+               </ul>
+             );
+             if (block.type === 'callout') return (
+               <div key={idx} className="my-10 p-8 bg-surface-bright border border-border-gray rounded-sm">
+                 <h3 className="font-display text-xl font-bold text-deep-forest mb-6">{block.heading}</h3>
+                 <ul className="space-y-4 text-sm list-none pl-0">
+                   {block.items.map((item, i) => (
+                     <li key={i} className="flex items-center gap-3">
+                       <CheckCircle2 size={16} className="text-primary flex-shrink-0" />
+                       <span>{item}</span>
+                     </li>
+                   ))}
+                 </ul>
+               </div>
+             );
+             return null;
+           })}
         </div>
 
         <aside className="lg:col-span-4 space-y-12">
            <div className="p-8 bg-surface-bright border border-border-gray rounded-sm">
               <h3 className="font-display text-xl font-bold text-deep-forest mb-4">Secure Your Supply</h3>
               <p className="text-sm text-on-surface-variant leading-relaxed mb-8">Discuss forward contracts and lock in current favorable rates with our trade specialists.</p>
-              <button 
+              <button
                 onClick={() => setActivePage('contact')}
                 className="w-full bg-deep-forest text-white font-display font-bold py-4 rounded-sm hover:opacity-90 transition-all">
                 Request a Quote
@@ -1183,13 +1397,10 @@ const ArticlePage = ({ setActivePage }: { setActivePage: (p: string) => void }) 
            <div>
               <h3 className="font-display text-lg font-bold text-deep-forest mb-6">Related Insights</h3>
               <div className="space-y-4">
-                 {[
-                   'Navigating Phytosanitary Regulations in EU Markets',
-                   'The Rise of Sustainable Farming Practices in Ivory Coast'
-                 ].map((t, i) => (
-                   <div key={i} className="p-5 border border-border-gray rounded-sm hover:border-primary cursor-pointer transition-all">
-                      <h4 className="text-sm font-bold text-primary mb-2 leading-tight">{t}</h4>
-                      <p className="text-[10px] font-medium text-on-surface-variant uppercase tracking-widest">Feb 28, 2024</p>
+                 {related.map((r) => (
+                   <div key={r.id} onClick={() => openArticle(r.id)} className="p-5 border border-border-gray rounded-sm hover:border-primary cursor-pointer transition-all">
+                      <h4 className="text-sm font-bold text-primary mb-2 leading-tight">{r.title}</h4>
+                      <p className="text-[10px] font-medium text-on-surface-variant uppercase tracking-widest">{r.date}</p>
                    </div>
                  ))}
               </div>
@@ -1204,21 +1415,27 @@ const ArticlePage = ({ setActivePage }: { setActivePage: (p: string) => void }) 
 
 export default function App() {
   const [activePage, setActivePage] = useState('home');
+  const [activeArticleId, setActiveArticleId] = useState<string>(articles[0].id);
+
+  const openArticle = (id: string) => {
+    setActiveArticleId(id);
+    setActivePage('article');
+  };
 
   useEffect(() => {
     window.scrollTo(0, 0);
-  }, [activePage]);
+  }, [activePage, activeArticleId]);
 
   return (
     <div className="min-h-screen flex flex-col font-sans">
       <Navbar activePage={activePage} setActivePage={setActivePage} />
-      
+
       <main className="flex-grow">
-        {activePage === 'home' && <HomePage setActivePage={setActivePage} />}
+        {activePage === 'home' && <HomePage setActivePage={setActivePage} openArticle={openArticle} />}
         {activePage === 'sourcing' && <SourcingPage setActivePage={setActivePage} />}
         {activePage === 'product' && <ProductPage setActivePage={setActivePage} />}
-        {activePage === 'insights' && <InsightsPage setActivePage={setActivePage} />}
-        {activePage === 'article' && <ArticlePage setActivePage={setActivePage} />}
+        {activePage === 'insights' && <InsightsPage setActivePage={setActivePage} openArticle={openArticle} />}
+        {activePage === 'article' && <ArticlePage articleId={activeArticleId} setActivePage={setActivePage} openArticle={openArticle} />}
         {activePage === 'contact' && <ContactPage />}
         {activePage === 'logistics' && <LogisticsPage setActivePage={setActivePage} />}
         {activePage === 'sustainability' && <SustainabilityPage setActivePage={setActivePage} />}
