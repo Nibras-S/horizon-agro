@@ -1,6 +1,17 @@
 import { motion } from "motion/react";
-import { Menu, X, ChevronRight, Phone, Mail, MapPin, Search, ArrowRight, Shield, Globe, TrendingUp, Verified, BarChart3, Clock, Package, FileText, CheckCircle2, Factory, Warehouse, ClipboardCheck, Ship, User, ShieldCheck, FileSignature } from "lucide-react";
+import { Menu, X, ChevronRight, ChevronDown, Phone, Mail, MapPin, Search, ArrowRight, Shield, Globe, TrendingUp, Verified, BarChart3, Clock, Package, FileText, CheckCircle2, Factory, Warehouse, ClipboardCheck, Ship, User, ShieldCheck, FileSignature, HelpCircle } from "lucide-react";
 import { useState, useEffect } from "react";
+import { BrowserRouter, Routes, Route, useNavigate, useLocation, useParams } from "react-router-dom";
+
+// Map old setActivePage names to URL paths so existing pages keep working
+const pageToPath = (page: string): string => {
+  switch (page) {
+    case 'home': return '/';
+    case 'product': return '/quality-control';
+    case 'article': return '/insights';
+    default: return `/${page}`;
+  }
+};
 
 // --- Data ---
 
@@ -145,48 +156,58 @@ const articles: Article[] = [
 
 // --- Components ---
 
-const Navbar = ({ activePage, setActivePage }: { activePage: string; setActivePage: (p: string) => void }) => {
+const NAV_ITEMS: { label: string; path: string }[] = [
+  { label: 'Sourcing', path: '/sourcing' },
+  { label: 'Logistics', path: '/logistics' },
+  { label: 'Quality Control', path: '/quality-control' },
+  { label: 'Market Data', path: '/insights' },
+  { label: 'Sustainability', path: '/sustainability' },
+];
+
+const Navbar = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
   const [isOpen, setIsOpen] = useState(false);
+
+  const isActive = (path: string) => {
+    if (path === '/insights') return location.pathname.startsWith('/insights');
+    return location.pathname === path;
+  };
+
+  const go = (path: string) => {
+    navigate(path);
+    setIsOpen(false);
+  };
 
   return (
     <nav className="fixed top-0 w-full z-50 bg-white border-b border-border-gray h-20 shadow-sm">
       <div className="max-w-7xl mx-auto px-4 md:px-8 h-full flex justify-between items-center">
-        <div 
+        <div
           className="font-display text-xl md:text-2xl font-bold text-deep-forest cursor-pointer tracking-tight"
-          onClick={() => setActivePage('home')}
+          onClick={() => go('/')}
         >
           HORIZON AGRO
         </div>
 
         <div className="hidden md:flex items-center gap-10">
-          {['Sourcing', 'Logistics', 'Quality Control', 'Market Data', 'Sustainability'].map((item) => (
+          {NAV_ITEMS.map(({ label, path }) => (
             <button
-              key={item}
-              onClick={() => {
-                if (item === 'Quality Control') setActivePage('product');
-                else if (item === 'Market Data') setActivePage('insights');
-                else if (item === 'Sourcing') setActivePage('sourcing');
-                else if (item === 'Logistics') setActivePage('logistics');
-                else if (item === 'Sustainability') setActivePage('sustainability');
-              }}
+              key={label}
+              onClick={() => go(path)}
               className={`font-sans text-sm font-medium transition-colors hover:text-primary ${
-                (item === 'Quality Control' && activePage === 'product') || 
-                (item === 'Market Data' && (activePage === 'insights' || activePage === 'article')) ||
-                (item === 'Sourcing' && activePage === 'sourcing') ||
-                (item === 'Logistics' && activePage === 'logistics') ||
-                (item === 'Sustainability' && activePage === 'sustainability')
-                ? 'text-primary border-b-2 border-primary pb-1'
-                : 'text-on-surface-variant'
+                isActive(path)
+                  ? 'text-primary border-b-2 border-primary pb-1'
+                  : 'text-on-surface-variant'
               }`}
             >
-              {item}
+              {label}
             </button>
           ))}
         </div>
 
         <div className="flex items-center gap-4">
           <button className="hidden md:block bg-tertiary text-white font-display text-sm font-semibold px-6 py-3 rounded-sm hover:bg-tertiary-container transition-colors"
-            onClick={() => setActivePage('contact')}>
+            onClick={() => go('/contact')}>
             Enquire Now
           </button>
           <button className="md:hidden text-primary" onClick={() => setIsOpen(!isOpen)}>
@@ -211,32 +232,19 @@ const Navbar = ({ activePage, setActivePage }: { activePage: string; setActivePa
           animate={{ opacity: 1, y: 0 }}
           className="md:hidden absolute top-20 left-0 w-full bg-white border-b border-border-gray p-6 flex flex-col gap-6 z-40"
         >
-          {['Sourcing', 'Logistics', 'Quality Control', 'Market Data', 'Sustainability'].map((item) => (
+          {NAV_ITEMS.map(({ label, path }) => (
             <button
-              key={item}
-              onClick={() => {
-                if (item === 'Quality Control') setActivePage('product');
-                else if (item === 'Market Data') setActivePage('insights');
-                else if (item === 'Sourcing') setActivePage('sourcing');
-                else if (item === 'Logistics') setActivePage('logistics');
-                else if (item === 'Sustainability') setActivePage('sustainability');
-                setIsOpen(false);
-              }}
+              key={label}
+              onClick={() => go(path)}
               className={`text-left font-sans text-lg font-medium transition-colors ${
-                (item === 'Quality Control' && activePage === 'product') || 
-                (item === 'Market Data' && (activePage === 'insights' || activePage === 'article')) ||
-                (item === 'Sourcing' && activePage === 'sourcing') ||
-                (item === 'Logistics' && activePage === 'logistics') ||
-                (item === 'Sustainability' && activePage === 'sustainability')
-                ? 'text-primary'
-                : 'text-on-surface-variant'
+                isActive(path) ? 'text-primary' : 'text-on-surface-variant'
               }`}
             >
-              {item}
+              {label}
             </button>
           ))}
           <button className="bg-tertiary text-white font-display font-semibold py-4 rounded-sm"
-            onClick={() => { setActivePage('contact'); setIsOpen(false); }}>
+            onClick={() => go('/contact')}>
             Enquire Now
           </button>
         </motion.div>
@@ -245,7 +253,8 @@ const Navbar = ({ activePage, setActivePage }: { activePage: string; setActivePa
   );
 };
 
-const Footer = ({ setActivePage }: { setActivePage: (p: string) => void }) => {
+const Footer = () => {
+  const navigate = useNavigate();
   return (
     <footer className="bg-surface-charcoal text-white py-16">
       <div className="max-w-7xl mx-auto px-4 md:px-8">
@@ -259,9 +268,9 @@ const Footer = ({ setActivePage }: { setActivePage: (p: string) => void }) => {
           <div className="flex flex-col gap-4">
             <h4 className="font-display text-sm font-bold text-tertiary uppercase tracking-widest">Company</h4>
             <div className="flex flex-col gap-2 text-sm text-outline-variant">
-              <button onClick={() => setActivePage('home')} className="text-left hover:text-white transition-colors">About Us</button>
+              <button onClick={() => navigate('/')} className="text-left hover:text-white transition-colors">About Us</button>
               <button className="text-left hover:text-white transition-colors">Careers</button>
-              <button onClick={() => setActivePage('contact')} className="text-left hover:text-white transition-colors">Contact</button>
+              <button onClick={() => navigate('/contact')} className="text-left hover:text-white transition-colors">Contact</button>
             </div>
           </div>
           <div className="flex flex-col gap-4">
@@ -1285,9 +1294,13 @@ const ContactPage = () => {
   );
 };
 
-const ArticlePage = ({ articleId, setActivePage, openArticle }: { articleId: string; setActivePage: (p: string) => void; openArticle: (id: string) => void }) => {
-  const article = articles.find(a => a.id === articleId) ?? articles[0];
+const ArticlePage = () => {
+  const navigate = useNavigate();
+  const { id } = useParams<{ id: string }>();
+  const article = articles.find(a => a.id === id) ?? articles[0];
   const related = articles.filter(a => a.id !== article.id).slice(0, 2);
+  const setActivePage = (p: string) => navigate(pageToPath(p));
+  const openArticle = (aid: string) => navigate(`/insights/${aid}`);
 
   return (
     <div className="pt-20">
